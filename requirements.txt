@@ -1,0 +1,7 @@
+groq
+deepgram-sdk
+python-dotenv
+opencv-python
+pillow
+
+gradio
