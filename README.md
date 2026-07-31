@@ -9,11 +9,11 @@ A Gradio-based Python prototype for skin-condition consultation using:
 ## Project layout
 - `app.py` – CLI-style terminal flow for image + voice input
 - `frontend.py` – Gradio web UI entrypoint
-- `brain_of_the_doctor.py` – LLM report generation and voice-summary orchestration
-- `voice_of_the_patient.py` – audio transcription with Groq Whisper
-- `voice_of_the_doctor.py` – text-to-speech output with Deepgram
-- `prompts.py` – system prompt for the dermatologist-style report
-- `test_*.py` – small smoke tests for internal modules
+- `src/` – packaged backend logic for analysis, prompts, speech-to-text, and text-to-speech
+- `src/brain_of_the_doctor.py` – LLM report generation and voice-summary orchestration
+- `src/voice_of_the_patient.py` – audio transcription with Groq Whisper
+- `src/voice_of_the_doctor.py` – text-to-speech output with Deepgram
+- `src/prompts.py` – system prompt for the dermatologist-style report
 
 ## Required environment
 1. Create a Python virtual environment.

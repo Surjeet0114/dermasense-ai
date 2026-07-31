@@ -1,8 +1,8 @@
 import gradio as gr
 
-from voice_of_the_patient import listen
-from brain_of_the_doctor import analyze_skin
-from voice_of_the_doctor import speak
+from src.voice_of_the_patient import listen
+from src.brain_of_the_doctor import analyze_skin
+from src.voice_of_the_doctor import speak
 
 
 def diagnose(image, audio, symptoms, history):
