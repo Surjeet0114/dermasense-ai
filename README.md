@@ -1,67 +1,278 @@
 # AI Skin Specialist
 
-A Gradio-based Python prototype for skin-condition consultation using:
-- image upload support
-- voice-to-text transcription
-- AI report generation
-- AI voice summary playback
+AI Skin Specialist is a Python-based AI prototype for skin image analysis and voice interaction.
 
-## Project layout
-- `app.py` – CLI-style terminal flow for image + voice input
-- `frontend.py` – Gradio web UI entrypoint
-- `src/` – packaged backend logic for analysis, prompts, speech-to-text, and text-to-speech
-- `src/brain_of_the_doctor.py` – LLM report generation and voice-summary orchestration
-- `src/voice_of_the_patient.py` – audio transcription with Groq Whisper
-- `src/voice_of_the_doctor.py` – text-to-speech output with Deepgram
-- `src/prompts.py` – system prompt for the dermatologist-style report
+The project combines vision-based AI analysis with speech-to-text and text-to-speech capabilities, providing a simple Gradio interface for experimentation and demonstration.
 
-## Required environment
-1. Create a Python virtual environment.
-2. Install dependencies from `requirements.txt` or `pyproject.toml`.
-3. Copy `.env.example` to `.env` and add your keys:
-   - `GROQ_API_KEY`
-   - `DEEPGRAM_API_KEY`
+## Features
 
-## How to run
+- Skin image upload and analysis
+- AI-generated skin analysis report
+- Voice input from the user
+- Voice-to-text transcription using Groq Whisper
+- AI-generated voice summary
+- Text-to-speech using Deepgram
+- Gradio-based web interface
+- Environment-based API key configuration
 
-### Option 1: Web UI
+## Architecture
+
+```text
+                    AI Skin Specialist
+                           │
+                           ▼
+                    Gradio Web UI
+                     frontend.py
+                           │
+              ┌────────────┴────────────┐
+              │                         │
+         Image Input               Voice Input
+              │                         │
+              ▼                         ▼
+     Skin Analysis Logic          Groq Whisper
+              │                         │
+              │                    Transcribed Text
+              │                         │
+              └────────────┬────────────┘
+                           ▼
+                  AI Analysis Pipeline
+                           │
+                           ▼
+                    Groq Vision Model
+                           │
+                           ▼
+                  Generated AI Report
+                           │
+                           ▼
+                  Voice Summary Generation
+                           │
+                           ▼
+                       Deepgram
+                           │
+                           ▼
+                    Audio Response
+```
+
+## Project Structure
+
+```text
+ai-skin-specialist/
+│
+├── app.py
+├── frontend.py
+├── README.md
+├── requirements.txt
+├── pyproject.toml
+├── .env.example
+├── .gitignore
+│
+└── src/
+    ├── __init__.py
+    ├── brain_of_the_doctor.py
+    ├── prompts.py
+    ├── voice_of_the_patient.py
+    └── voice_of_the_doctor.py
+```
+
+## Main Components
+
+### `app.py`
+
+Provides the terminal-based application flow for testing the AI pipeline without the Gradio interface.
+
+### `frontend.py`
+
+The main Gradio web interface.
+
+It provides the user-facing interface for:
+
+- Image input
+- Voice input
+- AI analysis
+- Generated report
+- Audio response
+
+### `src/brain_of_the_doctor.py`
+
+Contains the main AI analysis orchestration.
+
+It handles:
+
+- Image processing
+- AI model interaction
+- Skin analysis
+- Report generation
+- Voice-summary generation
+
+### `src/voice_of_the_patient.py`
+
+Handles patient voice input and converts speech into text using Groq Whisper.
+
+### `src/voice_of_the_doctor.py`
+
+Handles text-to-speech generation using Deepgram.
+
+### `src/prompts.py`
+
+Contains the prompts used to guide the AI during skin analysis and response generation.
+
+## Technology Stack
+
+- Python
+- Gradio
+- Groq
+- Groq Vision Models
+- Groq Whisper
+- Deepgram
+- Python Dotenv
+- OpenCV
+- Pillow
+
+## Requirements
+
+- Python 3.13+
+- Groq API key
+- Deepgram API key
+
+## Environment Variables
+
+Create a `.env` file in the project root.
+
+```env
+GROQ_API_KEY=your_groq_api_key
+DEEPGRAM_API_KEY=your_deepgram_api_key
+```
+
+Never commit the `.env` file or expose API keys in source control.
+
+## Installation
+
+### 1. Clone the repository
+
+```bash
+git clone <repository-url>
+cd ai-skin-specialist
+```
+
+### 2. Create a virtual environment
+
+Windows:
+
+```powershell
+python -m venv .venv
+.venv\Scripts\activate
+```
+
+Linux/macOS:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+### 3. Install dependencies
+
+Using `requirements.txt`:
+
 ```bash
 python -m pip install -r requirements.txt
+```
+
+Or using the project configuration:
+
+```bash
+pip install .
+```
+
+### 4. Configure environment variables
+
+Copy `.env.example` to `.env` and add your API keys:
+
+```env
+GROQ_API_KEY=your_groq_api_key
+DEEPGRAM_API_KEY=your_deepgram_api_key
+```
+
+## Running the Application
+
+### Gradio Web Interface
+
+Start the Gradio application:
+
+```bash
 python frontend.py
 ```
-Then open the local URL printed in the terminal, usually:
-`http://127.0.0.1:7860`
 
-### Option 2: Terminal CLI
+Gradio will provide a local URL in the terminal, usually:
+
+```text
+http://127.0.0.1:7860
+```
+
+Open the URL in your browser.
+
+### Terminal Application
+
+The AI pipeline can also be executed through:
+
 ```bash
 python app.py
 ```
-You will be prompted to enter:
-- an image path
-- a voice file path
 
-## Recommended cleanup before GitHub push
-Remove or archive these if you do not need them in the public repo:
-- `doctor_voice.mp3` and `patient_voice.mp3` – generated media; keep out of source control
-- `sample-image.png` – demo asset; replace with a more neutral or remove it
-- `list_models.py` – utility script, not part of the product flow
-- `test_*.py` – keep only if you want QA coverage; otherwise they can stay for local validation
-- `uv.lock` – useful only if you want reproducibility with `uv`; not required for general GitHub delivery
+The terminal application will request the required image and voice input.
 
-## GitHub push checklist
-1. Commit the source code and docs.
-2. Do not commit `.env` or API keys.
-3. Add a repository description and a `.gitignore`-protected `.env` file locally.
-4. Create a remote on GitHub and push:
+## AI Processing Flow
 
-```bash
-git init
-git add .
-git commit -m "Initial AI Skin Specialist prototype"
-git branch -M main
-git remote add origin <your-github-repo-url>
-git push -u origin main
+The application follows this general workflow:
+
+```text
+User
+ │
+ ├── Skin Image
+ │
+ └── Voice Input
+        │
+        ▼
+   Speech-to-Text
+        │
+        ▼
+   AI Analysis
+        │
+        ├── Image Understanding
+        ├── User Symptoms
+        └── Prompt Instructions
+        │
+        ▼
+   Generated Report
+        │
+        ▼
+   Voice Summary
+        │
+        ▼
+   Text-to-Speech
+        │
+        ▼
+   Audio Response
 ```
 
-## Important note
-This project is a prototype and should not be treated as a medical diagnosis system. It is best used as a demo or research assistant, not as a real clinical decision tool.
+## Disclaimer
+
+This project is an AI prototype for experimentation, demonstration, and research purposes.
+
+It is **not a medical diagnosis system** and should not be used as a substitute for professional medical advice, diagnosis, or treatment.
+
+AI-generated results may be inaccurate or incomplete. Always consult a qualified healthcare professional for actual medical concerns.
+
+## Project Status
+
+The project is maintained as a standalone AI prototype demonstrating:
+
+- Computer vision
+- Large language models
+- Speech-to-text
+- Text-to-speech
+- Multimodal AI
+- AI-assisted skin analysis
+- Gradio-based AI applications
+
+The AI functionality from this project can also serve as a foundation for integration into a larger application platform.
